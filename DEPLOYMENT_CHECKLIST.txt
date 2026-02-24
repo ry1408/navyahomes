@@ -1,0 +1,256 @@
+┌─────────────────────────────────────────────────────────────┐
+│         NAVYA HOMES - WEBSITE DEPLOYMENT CHECKLIST          │
+└─────────────────────────────────────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════
+PHASE 1: PURCHASE & SETUP (Do This First!)
+═══════════════════════════════════════════════════════════════
+
+[ ] 1. Buy Hosting
+    Recommended: Hostinger (₹59/month)
+    Website: hostinger.in
+    Plan: Business/Premium with Laravel support
+    
+[ ] 2. Buy Domain Name  
+    Suggested: navyahomes.in / navyahomesindia.com
+    From: GoDaddy, Namecheap, or Hostinger
+    Cost: ₹99-499/year
+    
+[ ] 3. Get Hosting Credentials
+    Note down:
+    - cPanel URL: _______________________________
+    - cPanel Username: __________________________
+    - cPanel Password: __________________________
+    - Server IP: ________________________________
+    - FTP Host: _________________________________
+    - FTP Username: _____________________________
+    - FTP Password: _____________________________
+
+═══════════════════════════════════════════════════════════════
+PHASE 2: PREPARE FILES (On Your Local Computer)
+═══════════════════════════════════════════════════════════════
+
+[ ] 4. Build Production Assets
+    Command: npm run build
+    Location: D:\wamp\www\navyahomes
+    
+[ ] 5. Export Database
+    Steps:
+    - Open: http://localhost/phpmyadmin
+    - Select database: navyahomes
+    - Click "Export" tab
+    - Click "Go" button
+    - Save file: navyahomes_backup.sql
+    
+[ ] 6. Test Website Locally
+    Check these pages work:
+    [ ] Home page (/)
+    [ ] Projects (/projects)
+    [ ] Plots (/plots)
+    [ ] About (/about)
+    [ ] Contact (/contact)
+    [ ] Admin login (/admin/login)
+    
+[ ] 7. Create ZIP of Project
+    Compress entire navyahomes folder
+    Or upload via FTP (FileZilla)
+
+═══════════════════════════════════════════════════════════════
+PHASE 3: SERVER SETUP (On Your Hosting)
+═══════════════════════════════════════════════════════════════
+
+[ ] 8. Login to cPanel
+    URL: (provided by hosting)
+    
+[ ] 9. Create MySQL Database
+    Steps:
+    - cPanel → MySQL Databases
+    - Create database: _________________________
+    - Create user: _____________________________
+    - Password: ________________________________
+    - Add user to database (All Privileges)
+    
+[ ] 10. Import Database
+    Steps:
+    - cPanel → phpMyAdmin
+    - Select your new database
+    - Click "Import"
+    - Choose navyahomes_backup.sql
+    - Click "Go"
+    
+[ ] 11. Upload Website Files
+    Method A - File Manager:
+    - cPanel → File Manager
+    - Upload to public_html
+    - Extract ZIP file
+    
+    Method B - FTP (FileZilla):
+    - Install FileZilla
+    - Connect using FTP credentials
+    - Upload all files to public_html
+
+═══════════════════════════════════════════════════════════════
+PHASE 4: CONFIGURATION (Critical!)
+═══════════════════════════════════════════════════════════════
+
+[ ] 12. Create .env File
+    Steps:
+    - Use .env.production as template
+    - Update these values:
+      [ ] APP_URL=https://yourdomain.com
+      [ ] APP_ENV=production
+      [ ] APP_DEBUG=false
+      [ ] DB_DATABASE=(your database name)
+      [ ] DB_USERNAME=(your database user)
+      [ ] DB_PASSWORD=(your database password)
+    
+[ ] 13. Set File Permissions
+    Via Terminal or File Manager:
+    storage/ → 755
+    bootstrap/cache/ → 755
+    
+[ ] 14. Run Laravel Commands
+    Via Terminal (SSH) or cPanel Terminal:
+    [ ] composer install --optimize-autoloader --no-dev
+    [ ] php artisan key:generate
+    [ ] php artisan migrate --force
+    [ ] php artisan storage:link
+    [ ] php artisan config:cache
+    [ ] php artisan route:cache
+    [ ] php artisan view:cache
+
+═══════════════════════════════════════════════════════════════
+PHASE 5: DOMAIN & SSL
+═══════════════════════════════════════════════════════════════
+
+[ ] 15. Point Domain to Hosting
+    Login to domain registrar (GoDaddy/Namecheap):
+    - Update nameservers to hosting nameservers
+    OR
+    - Add A record pointing to server IP
+    
+    Wait: 24-48 hours for DNS propagation
+    
+[ ] 16. Install SSL Certificate (HTTPS)
+    Steps:
+    - cPanel → SSL/TLS Status
+    - Select your domain
+    - Click "Run AutoSSL"
+    - Wait 5-10 minutes
+    
+[ ] 17. Force HTTPS
+    Add to .htaccess (if not already):
+    RewriteEngine On
+    RewriteCond %{HTTPS} off
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+═══════════════════════════════════════════════════════════════
+PHASE 6: TESTING (Before Launch!)
+═══════════════════════════════════════════════════════════════
+
+[ ] 18. Test All Pages
+    [ ] https://yourdomain.com (Home)
+    [ ] https://yourdomain.com/projects
+    [ ] https://yourdomain.com/plots
+    [ ] https://yourdomain.com/about
+    [ ] https://yourdomain.com/contact
+    [ ] https://yourdomain.com/admin/login
+    
+[ ] 19. Test Functionality
+    [ ] Contact form sends emails
+    [ ] All images loading correctly
+    [ ] Admin login works
+    [ ] Lead form submission works
+    [ ] Mobile responsive design
+    [ ] Site visit request works
+    
+[ ] 20. Test Performance
+    [ ] Page load speed < 3 seconds
+    [ ] Images optimized
+    [ ] No console errors (F12 browser)
+    
+[ ] 21. SEO Check
+    [ ] Meta titles set
+    [ ] Meta descriptions set
+    [ ] Robots.txt accessible
+    [ ] Sitemap created (optional)
+
+═══════════════════════════════════════════════════════════════
+PHASE 7: LAUNCH! 🚀
+═══════════════════════════════════════════════════════════════
+
+[ ] 22. Final Checks
+    [ ] .env has APP_DEBUG=false
+    [ ] All test data removed
+    [ ] Admin password is strong
+    [ ] Backup taken
+    
+[ ] 23. Go Live!
+    [ ] Announce to team
+    [ ] Share website URL
+    [ ] Monitor for first 24 hours
+    
+[ ] 24. Post-Launch
+    [ ] Submit to Google Search Console
+    [ ] Add Google Analytics (optional)
+    [ ] Setup regular backups
+    [ ] Monitor error logs daily
+
+═══════════════════════════════════════════════════════════════
+QUICK COMMANDS REFERENCE
+═══════════════════════════════════════════════════════════════
+
+Local (Before Upload):
+  npm run build
+  php artisan config:clear
+  php artisan cache:clear
+
+Server (After Upload):
+  composer install --optimize-autoloader --no-dev
+  php artisan key:generate
+  php artisan migrate --force
+  php artisan storage:link
+  php artisan config:cache
+  php artisan route:cache
+  php artisan view:cache
+
+Fix Permissions:
+  chmod -R 755 storage
+  chmod -R 755 bootstrap/cache
+
+═══════════════════════════════════════════════════════════════
+NEED HELP?
+═══════════════════════════════════════════════════════════════
+
+Hosting Support:
+  Hostinger: 24/7 Live Chat at hostinger.in
+  
+Documentation:
+  Laravel: laravel.com/docs/deployment
+  Full Guide: See DEPLOYMENT_GUIDE.md
+
+═══════════════════════════════════════════════════════════════
+ESTIMATED TIMELINE
+═══════════════════════════════════════════════════════════════
+
+Purchase hosting & domain:     30 minutes
+Prepare files:                 15 minutes
+Upload to server:              20 minutes
+Configuration:                 30 minutes
+Domain & SSL setup:            2-48 hours (DNS propagation)
+Testing:                       1 hour
+Total:                         2-3 hours (+ DNS wait time)
+
+═══════════════════════════════════════════════════════════════
+ESTIMATED COSTS (First Year)
+═══════════════════════════════════════════════════════════════
+
+Hosting (Hostinger):           ₹708/year (₹59/month)
+Domain (.in):                  ₹99/year
+SSL Certificate:               FREE (Let's Encrypt)
+                               ─────────────
+TOTAL:                         ~₹800-1000/year
+
+═══════════════════════════════════════════════════════════════
+
+✅ Save this checklist and mark items as you complete them!
